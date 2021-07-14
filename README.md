@@ -4,12 +4,12 @@ Author: Arbala Security
 
 For any technical questions, please contact info@arbalasystems.com   
 
-This ARM template will create a watchlist and a logicapp to work in tandem with one another. The logicapp is intended to be run from an Azure Sentinel alert. It will extract the domains from entities in an alert and add them to the watchlist. You will be able to view, edit, or repurpose the watchlist as you see fit.
+This ARM template will create a Watchlist and a Logic App to work in tandem with one another. The Logic App is intended to be run from an Azure Sentinel alert. It will extract the domains from entities in an alert and add them to the watchlist. You will be able to view, edit, or repurpose the watchlist as you see fit.
 
 #
 To configure and deploy this playbook:
  
-Open your browser and ensure you are logged into your Azure Sentinel workspace. In a separate tab, open the link to our playbook on the Arbala Security GitHub Repository:
+Open your browser and ensure you are logged into your Azure Sentinel workspace. In a separate tab, open the link to our ARM template on the Arbala Security GitHub Repository:
 
 https://github.com/Arbala-Security/AS_Domain_Watchlist
 
