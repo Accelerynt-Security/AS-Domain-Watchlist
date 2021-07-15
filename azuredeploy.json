@@ -26,11 +26,11 @@
     },
     "resources": [
         {
-            "name": "[concat(parameters('workspaceName'), '/Microsoft.SecurityInsights/ReferenceTemplate')]",
+            "name": "[parameters('WatchlistName')]",
             "type": "Microsoft.OperationalInsights/workspaces/providers/Watchlists",
             "kind": "",
             "properties": {
-                "displayName": "ReferenceTemplate",
+                "displayName": "[parameters('WatchlistName')]",
                 "source": "[concat(parameters('WatchlistName'),'.csv')]",
                 "description": "[parameters('watchlistdescription')]",
                 "provider": "Custom",
