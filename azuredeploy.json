@@ -22,7 +22,8 @@
         }
     },
     "variables": {
-        "azuresentinel": "[concat('azuresentinel-', parameters('PlaybookName'))]"
+        "azuresentinel": "[concat('azuresentinel-', parameters('PlaybookName'))]",
+        "azuresentinel2": "[concat('azuresentinel2-', parameters('PlaybookName'))]"
     },
     "resources": [
         {
@@ -60,12 +61,27 @@
             }
         },
         {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "[variables('azuresentinel2')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "displayName": "[parameters('PlaybookName')]",
+                "customParameterValues": {
+                },
+                "api": {
+                    "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
+                }
+            }
+        },
+        {
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[parameters('PlaybookName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/connections', variables('azuresentinel'))]"
+                "[resourceId('Microsoft.Web/connections', variables('azuresentinel'))]",
+                "[resourceId('Microsoft.Web/connections', variables('azuresentinel2'))]"
             ],
             "tags": {
                 "LogicAppsCategory": "security"
@@ -376,6 +392,26 @@
                                         "name": "Extract2",
                                         "value": "''"
                                     }
+                                },
+                                "Watchlists_-_Add_a_new_watchlist_item": {
+                                    "runAfter": {
+                                        "Condition-_URL_Parsing_Remove_Filepath": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "Domains": "@{variables('Extract3')}"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuresentinel2']['connectionId']"
+                                            }
+                                        },
+                                        "method": "put",
+                                        "path": "/Watchlists/subscriptions/@{encodeURIComponent(variables('SubscriptionID'))}/resourceGroups/@{encodeURIComponent(variables('ResourceGroup'))}/workspaces/@{encodeURIComponent(variables('WorkspaceName'))}/watchlists/@{encodeURIComponent(variables('WatchlistName'))}/watchlistItem"
+                                    }
                                 }
                             },
                             "runAfter": {
@@ -559,36 +595,6 @@
                                     "type": "array"
                                 }
                             }
-                        },
-                        "Update_existing_Watchlist_": {
-                            "runAfter": {
-                                "Create_CSV_table": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "Http",
-                            "inputs": {
-                                "authentication": {
-                                    "type": "ManagedServiceIdentity"
-                                },
-                                "body": {
-                                    "properties": {
-                                        "contentType": "text/csv",
-                                        "createdBy": {
-                                            "objectId": "c580700e-878a-4f6d-a6dd-3f2300d4ddca"
-                                        },
-                                        "description": "csv1",
-                                        "displayName": "@variables('WatchlistName')",
-                                        "labels": [],
-                                        "numberOfLinesToSkip": "0",
-                                        "provider": "Microsoft",
-                                        "rawContent": "@{body('Create_CSV_table')}",
-                                        "source": "Local file"
-                                    }
-                                },
-                                "method": "PUT",
-                                "uri": "https://management.azure.com/subscriptions/@{variables('SubscriptionID')}/resourceGroups/@{variables('ResourceGroup')}/providers/Microsoft.OperationalInsights/workspaces/@{variables('WorkspaceName')}/providers/Microsoft.SecurityInsights/watchlists/@{variables('WatchlistName')}?api-version=2019-01-01-preview"
-                            }
                         }
                     },
                     "outputs": {}
@@ -598,6 +604,11 @@
                         "value": {
                             "azuresentinel": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', variables('azuresentinel'))]",
+                                "connectionName": "azuresentinel",
+                                "id": "/subscriptions/subscription().subscriptionId/providers/Microsoft.Web/locations/resourceGroup().location/managedApis/azuresentinel"
+                            },
+                            "azuresentinel2": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('azuresentinel2'))]",
                                 "connectionName": "azuresentinel",
                                 "id": "/subscriptions/subscription().subscriptionId/providers/Microsoft.Web/locations/resourceGroup().location/managedApis/azuresentinel"
                             }
