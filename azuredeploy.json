@@ -114,18 +114,6 @@
                         }
                     },
                     "actions": {
-                        "Create_CSV_table": {
-                            "runAfter": {
-                                "For_each-_Alert_URLs": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "Table",
-                            "inputs": {
-                                "format": "CSV",
-                                "from": "@variables('Domains')"
-                            }
-                        },
                         "Entities_-_Get_URLs": {
                             "runAfter": {},
                             "type": "ApiConnection",
@@ -143,20 +131,6 @@
                         "For_each-_Alert_URLs": {
                             "foreach": "@body('Parse_JSON')",
                             "actions": {
-                                "Append_to_array_variable": {
-                                    "runAfter": {
-                                        "Condition-_URL_Parsing_Remove_Filepath": [
-                                            "Succeeded"
-                                        ]
-                                    },
-                                    "type": "AppendToArrayVariable",
-                                    "inputs": {
-                                        "name": "Domains",
-                                        "value": {
-                                            "Domains": "@{variables('Extract3')}"
-                                        }
-                                    }
-                                },
                                 "Condition-_URL_Parsing_Remove_Filepath": {
                                     "actions": {
                                         "Condition-_Formatting": {
