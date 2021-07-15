@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "PlaybookName": {
@@ -17,13 +17,12 @@
         "watchlistdescription": {
             "type": "string",
             "metadata": {
-                "description": "Describe what the Watchlist is for."
+                "description": "Describe what the Watchlist is for"
             }
         }
     },
     "variables": {
-        "azuresentinel": "[concat('azuresentinel-', parameters('PlaybookName'))]",
-        "azuresentinel2": "[concat('azuresentinel2-', parameters('PlaybookName'))]"
+        "azuresentinelwatchlist": "[concat('azuresentinelwatchlist-', parameters('PlaybookName'))]"
     },
     "resources": [
         {
@@ -32,7 +31,7 @@
             "kind": "",
             "properties": {
                 "displayName": "ReferenceTemplate",
-                "source": "watchlist.csv",
+                "source": "[concat(parameters('WatchlistName'),'.csv')]",
                 "description": "[parameters('watchlistdescription')]",
                 "provider": "Custom",
                 "isDeleted": false,
@@ -49,21 +48,7 @@
         {
             "type": "Microsoft.Web/connections",
             "apiVersion": "2016-06-01",
-            "name": "[variables('azuresentinel')]",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "displayName": "[parameters('PlaybookName')]",
-                "customParameterValues": {
-                },
-                "api": {
-                    "id": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Web/connections",
-            "apiVersion": "2016-06-01",
-            "name": "[variables('azuresentinel2')]",
+            "name": "[variables('azuresentinelwatchlist')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "displayName": "[parameters('PlaybookName')]",
@@ -80,8 +65,7 @@
             "name": "[parameters('PlaybookName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/connections', variables('azuresentinel'))]",
-                "[resourceId('Microsoft.Web/connections', variables('azuresentinel2'))]"
+                "[resourceId('Microsoft.Web/connections', variables('azuresentinelwatchlist'))]"
             ],
             "tags": {
                 "LogicAppsCategory": "security"
@@ -106,7 +90,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                        "name": "@parameters('$connections')['azuresentinelwatchlist']['connectionId']"
                                     }
                                 },
                                 "path": "/subscribe"
@@ -121,7 +105,7 @@
                                 "body": "@triggerBody()?['Entities']",
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                        "name": "@parameters('$connections')['azuresentinelwatchlist']['connectionId']"
                                     }
                                 },
                                 "method": "post",
@@ -380,7 +364,7 @@
                                         },
                                         "host": {
                                             "connection": {
-                                                "name": "@parameters('$connections')['azuresentinel2']['connectionId']"
+                                                "name": "@parameters('$connections')['azuresentinelwatchlist']['connectionId']"
                                             }
                                         },
                                         "method": "put",
@@ -576,15 +560,10 @@
                 "parameters": {
                     "$connections": {
                         "value": {
-                            "azuresentinel": {
-                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('azuresentinel'))]",
-                                "connectionName": "azuresentinel",
-                                "id": "/subscriptions/subscription().subscriptionId/providers/Microsoft.Web/locations/resourceGroup().location/managedApis/azuresentinel"
-                            },
-                            "azuresentinel2": {
-                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('azuresentinel2'))]",
-                                "connectionName": "azuresentinel",
-                                "id": "/subscriptions/subscription().subscriptionId/providers/Microsoft.Web/locations/resourceGroup().location/managedApis/azuresentinel"
+                            "azuresentinelwatchlist": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('azuresentinelwatchlist'))]",
+                                "connectionName": "[variables('azuresentinelwatchlist')]",
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
                             }
                         }
                     }
