@@ -46,4 +46,15 @@ Once the resources have validated, click on "Create".
 
 The resources should take around a minute to deploy. Once the deployment is complete, you can expand the "Deployment details" section to view them.
 Click the one corresponding to the Logic App.
-
+                                                                                                                             
+![Template](Images/template3.png)
+                                                                                                                             
+![Template](Images/logicappedit.png)
+                                                                                                                             
+![Template](Images/logicappconnections1.png)
+                                                                                                                            
+![Template](Images/logicappconnections2.png)                                                                                                                                                                                                                                                         
+![Template](Images/logicappconnections3.png) 
+                                                                                                                             
+![Template](Images/logicappconnections4.png)                                                                                                                                                                                                                                                         
+![Template](Images/logicappconnections5.png)                                                                                                                               
