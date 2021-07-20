@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "PlaybookName": {
@@ -17,21 +17,21 @@
         "watchlistdescription": {
             "type": "string",
             "metadata": {
-                "description": "Describe what the Watchlist is for."
+                "description": "Describe what the Watchlist is for"
             }
         }
     },
     "variables": {
-        "azuresentinel": "[concat('azuresentinel-', parameters('PlaybookName'))]"
+        "azuresentinelwatchlist": "[concat('azuresentinelwatchlist-', parameters('PlaybookName'))]"
     },
     "resources": [
         {
-            "name": "[concat(parameters('workspaceName'), '/Microsoft.SecurityInsights/ReferenceTemplate')]",
+            "name": "[parameters('WatchlistName')]",
             "type": "Microsoft.OperationalInsights/workspaces/providers/Watchlists",
             "kind": "",
             "properties": {
-                "displayName": "ReferenceTemplate",
-                "source": "watchlist.csv",
+                "displayName": "[parameters('WatchlistName')]",
+                "source": "[concat(parameters('WatchlistName'),'.csv')]",
                 "description": "[parameters('watchlistdescription')]",
                 "provider": "Custom",
                 "isDeleted": false,
@@ -48,7 +48,7 @@
         {
             "type": "Microsoft.Web/connections",
             "apiVersion": "2016-06-01",
-            "name": "[variables('azuresentinel')]",
+            "name": "[variables('azuresentinelwatchlist')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "displayName": "[parameters('PlaybookName')]",
@@ -65,7 +65,7 @@
             "name": "[parameters('PlaybookName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/connections', variables('azuresentinel'))]"
+                "[resourceId('Microsoft.Web/connections', variables('azuresentinelwatchlist'))]"
             ],
             "tags": {
                 "LogicAppsCategory": "security"
@@ -90,7 +90,7 @@
                                 },
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                        "name": "@parameters('$connections')['azuresentinelwatchlist']['connectionId']"
                                     }
                                 },
                                 "path": "/subscribe"
@@ -98,18 +98,6 @@
                         }
                     },
                     "actions": {
-                        "Create_CSV_table": {
-                            "runAfter": {
-                                "For_each-_Alert_URLs": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "Table",
-                            "inputs": {
-                                "format": "CSV",
-                                "from": "@variables('Domains')"
-                            }
-                        },
                         "Entities_-_Get_URLs": {
                             "runAfter": {},
                             "type": "ApiConnection",
@@ -117,7 +105,7 @@
                                 "body": "@triggerBody()?['Entities']",
                                 "host": {
                                     "connection": {
-                                        "name": "@parameters('$connections')['azuresentinel']['connectionId']"
+                                        "name": "@parameters('$connections')['azuresentinelwatchlist']['connectionId']"
                                     }
                                 },
                                 "method": "post",
@@ -127,20 +115,6 @@
                         "For_each-_Alert_URLs": {
                             "foreach": "@body('Parse_JSON')",
                             "actions": {
-                                "Append_to_array_variable": {
-                                    "runAfter": {
-                                        "Condition-_URL_Parsing_Remove_Filepath": [
-                                            "Succeeded"
-                                        ]
-                                    },
-                                    "type": "AppendToArrayVariable",
-                                    "inputs": {
-                                        "name": "Domains",
-                                        "value": {
-                                            "Domains": "@{variables('Extract3')}"
-                                        }
-                                    }
-                                },
                                 "Condition-_URL_Parsing_Remove_Filepath": {
                                     "actions": {
                                         "Condition-_Formatting": {
@@ -376,6 +350,26 @@
                                         "name": "Extract2",
                                         "value": "''"
                                     }
+                                },
+                                "Watchlists_-_Add_a_new_watchlist_item": {
+                                    "runAfter": {
+                                        "Condition-_URL_Parsing_Remove_Filepath": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "Domains": "@{variables('Extract3')}"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azuresentinelwatchlist']['connectionId']"
+                                            }
+                                        },
+                                        "method": "put",
+                                        "path": "/Watchlists/subscriptions/@{encodeURIComponent(variables('SubscriptionID'))}/resourceGroups/@{encodeURIComponent(variables('ResourceGroup'))}/workspaces/@{encodeURIComponent(variables('WorkspaceName'))}/watchlists/@{encodeURIComponent(variables('WatchlistName'))}/watchlistItem"
+                                    }
                                 }
                             },
                             "runAfter": {
@@ -559,36 +553,6 @@
                                     "type": "array"
                                 }
                             }
-                        },
-                        "Update_existing_Watchlist_": {
-                            "runAfter": {
-                                "Create_CSV_table": [
-                                    "Succeeded"
-                                ]
-                            },
-                            "type": "Http",
-                            "inputs": {
-                                "authentication": {
-                                    "type": "ManagedServiceIdentity"
-                                },
-                                "body": {
-                                    "properties": {
-                                        "contentType": "text/csv",
-                                        "createdBy": {
-                                            "objectId": "c580700e-878a-4f6d-a6dd-3f2300d4ddca"
-                                        },
-                                        "description": "csv1",
-                                        "displayName": "@variables('WatchlistName')",
-                                        "labels": [],
-                                        "numberOfLinesToSkip": "0",
-                                        "provider": "Microsoft",
-                                        "rawContent": "@{body('Create_CSV_table')}",
-                                        "source": "Local file"
-                                    }
-                                },
-                                "method": "PUT",
-                                "uri": "https://management.azure.com/subscriptions/@{variables('SubscriptionID')}/resourceGroups/@{variables('ResourceGroup')}/providers/Microsoft.OperationalInsights/workspaces/@{variables('WorkspaceName')}/providers/Microsoft.SecurityInsights/watchlists/@{variables('WatchlistName')}?api-version=2019-01-01-preview"
-                            }
                         }
                     },
                     "outputs": {}
@@ -596,10 +560,10 @@
                 "parameters": {
                     "$connections": {
                         "value": {
-                            "azuresentinel": {
-                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('azuresentinel'))]",
-                                "connectionName": "azuresentinel",
-                                "id": "/subscriptions/subscription().subscriptionId/providers/Microsoft.Web/locations/resourceGroup().location/managedApis/azuresentinel"
+                            "azuresentinelwatchlist": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('azuresentinelwatchlist'))]",
+                                "connectionName": "[variables('azuresentinelwatchlist')]",
+                                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azuresentinel')]"
                             }
                         }
                     }
