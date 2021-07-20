@@ -28,13 +28,13 @@ In the first section:
 
 In the **Parameters** section:   
 
-* **Playbook Name**: This can be left as “AS_Domain_Watchlist” or you may change it.  
+**1) Playbook Name**: This can be left as “AS_Domain_Watchlist” or you may change it.  
 
-* **WorkspaceName**: Enter the name of the Azure Sentinel Workspace you are using for deployment.
+**2) WorkspaceName**: Enter the name of the Azure Sentinel Workspace you are using for deployment.
 
-* **WatchlistName**: You may keep the default name or change it to something to better suit your use case.
+**3) WatchlistName**: You may keep the default name or change it to something to better suit your use case.
 
-* **watchlistdescription**:  Enter a description for your watchlist. 
+**4) watchlistdescription**:  Enter a description for your watchlist. 
 
 Towards the bottom, click on “Review + create”. 
 
