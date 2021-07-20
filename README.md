@@ -49,12 +49,30 @@ Click the one corresponding to the Logic App.
                                                                                                                              
 ![Template](Images/template3.png)
                                                                                                                              
-![Template](Images/logicappedit.png)
+Click on the “Edit” button. This will bring us into the Logic Apps Designer.
                                                                                                                              
-![Template](Images/logicappconnections1.png)
-                                                                                                                            
-![Template](Images/logicappconnections2.png)                                                                                                                                                                                                                                                         
-![Template](Images/logicappconnections3.png) 
+![logicappedit](Images/logicappedit.png)
+
+Click on the bar labeled “Connections”.
+
+Here you will select the connection with the same name as your Playbook.                                                                                                         
                                                                                                                              
-![Template](Images/logicappconnections4.png)                                                                                                                                                                                                                                                         
+![logicappconnections](Images/logicappconnections1.png)
+
+Here you will select the connection with the same name as your Playbook. Click on the exclamation  icon.                          
+                                                                                                                             
+![logicappconnections](Images/logicappconnections2.png)                                                                                                                           
+                                                                                                                             
+You will be prompted to authorize the connection with your Azure account.
+                                                                                                                             
+![logicappconnections](Images/logicappconnections3.png) 
+ 
+ Once the connection is set up, you will need to check the other connectors requiring an Azure Sentinel connection
+                                                                                             
+One of the two remaining connections is directly below the first. Check for the indicated display. You may need to unselect and then reselect the desired connection after authorizing the first for it to be recognized as valid.
+                                                                                                                             
+![Template](Images/logicappconnections4.png)                                                                                                                                     
+
+The remaining connection is inside the For Loop as indicated. Repeat the same process here.                                       
+                                                                                                                             
 ![Template](Images/logicappconnections5.png)                                                                                                                               
