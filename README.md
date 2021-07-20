@@ -76,3 +76,22 @@ One of the two remaining connections is directly below the first. Check for the 
 The remaining connection is inside the For Loop as indicated. Repeat the same process here.                                       
                                                                                                                              
 ![Template](Images/logicappconnections5.png)                                                                                                                               
+
+#
+To run this playbook on an alert in Azure Sentinel, navigate to "Incidents" under "Threat Management" in the left-hand menu.
+
+![Nav1](Images/nav1.png)
+
+From there you can select an incident that has one or more account entities.
+
+![Nav2](Images/nav2.png)
+
+Click the "View full details" button in the bottom right-hand corner.
+
+In the middle window, scroll to the right and click "View playbooks".
+
+![Nav3](Images/nav3.png)
+
+Find the AS_Domain_Watchlist playbook and click run.
+
+![Nav4](Images/nav4.png)                                                                                                               
