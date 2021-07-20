@@ -30,9 +30,9 @@ In the **Parameters** section:
 
 * **Playbook Name**: This can be left as “AS_Domain_Watchlist” or you may change it.  
 
-* **WorkspaceName**: Enter the name of the Azure Sentinel Workspace you are using for deplolyment.
+* **WorkspaceName**: Enter the name of the Azure Sentinel Workspace you are using for deployment.
 
-* **WatchlistName**: You may keep the default name or change it to something to better suit your usecase.
+* **WatchlistName**: You may keep the default name or change it to something to better suit your use case.
 
 * **watchlistdescription**:  Enter a description for your watchlist. 
 
@@ -46,3 +46,4 @@ Once the resources have validated, click on "Create".
 
 The resources should take around a minute to deploy. Once the deployment is complete, you can expand the "Deployment details" section to view them.
 Click the one corresponding to the Logic App.
+
