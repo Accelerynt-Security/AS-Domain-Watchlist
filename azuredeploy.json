@@ -7,8 +7,10 @@
             "type": "String"
         },
         "WorkspaceName": {
-            "defaultValue": "Enter your workspacename here",
-            "type": "String"
+            "type": "string",
+            "metadata": {
+                "description": "Enter your Workspace Name here"
+            }
         },
         "WatchlistName": {
             "defaultValue": "AS_Domain_Watchlist",
