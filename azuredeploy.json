@@ -4,7 +4,7 @@
     "parameters": {
         "PlaybookName": {
             "defaultValue": "AS_Domain_Watchlist",
-            "type": "String"
+            "type": "string"
         },
         "WorkspaceName": {
             "type": "string",
@@ -14,9 +14,9 @@
         },
         "WatchlistName": {
             "defaultValue": "AS_Domain_Watchlist",
-            "type": "String"
+            "type": "string"
         },
-        "watchlistdescription": {
+        "WatchlistDescription": {
             "type": "string",
             "metadata": {
                 "description": "Describe what the Watchlist is for"
@@ -34,7 +34,7 @@
             "properties": {
                 "displayName": "[parameters('WatchlistName')]",
                 "source": "[concat(parameters('WatchlistName'),'.csv')]",
-                "description": "[parameters('watchlistdescription')]",
+                "description": "[parameters('WatchlistDescription')]",
                 "provider": "Custom",
                 "isDeleted": false,
                 "labels": [
