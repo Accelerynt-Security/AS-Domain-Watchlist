@@ -1,4 +1,4 @@
-# AS_Domain_Watchlist
+# AS-Domain-Watchlist
 
 Author: Arbala Security
 
@@ -11,12 +11,12 @@ To configure and deploy this playbook:
  
 Open your browser and ensure you are logged into your Azure Sentinel workspace. In a separate tab, open the link to our ARM template on the Arbala Security GitHub Repository:
 
-https://github.com/Arbala-Security/AS_Domain_Watchlist
+https://github.com/Arbala-Security/AS-Domain-Watchlist
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FArbala-Security%2FAS_Domain_Watchlist%2Fmain%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FArbala-Security%2FAS-Domain-Watchlist%2Fmain%2Fazuredeploy.json" target="_blank">
     <img src="https://aka.ms/deploytoazurebutton""/>
 </a>
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FArbala-Security%2FAS_Domain_Watchlist%2Fmain%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FArbala-Security%2FAS-Domain-Watchlist%2Fmain%2Fazuredeploy.json" target="_blank">
 <img src="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazuregov.png"/>
 </a>                                                 
 
@@ -28,7 +28,7 @@ In the first section:
 
 In the **Parameters** section:   
 
-**1) Playbook Name**: This can be left as “AS_Domain_Watchlist” or you may change it.  
+**1) Playbook Name**: This can be left as “AS-Domain-Watchlist” or you may change it.  
 
 **2) Workspace Name**: Enter the name of the Azure Sentinel Workspace you are using for deployment.
 
