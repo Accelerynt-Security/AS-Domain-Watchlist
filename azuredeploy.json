@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "PlaybookName": {
-            "defaultValue": "AS_Domain_Watchlist",
+            "defaultValue": "AS-Domain-Watchlist",
             "type": "string"
         },
         "WorkspaceName": {
@@ -13,7 +13,7 @@
             }
         },
         "WatchlistName": {
-            "defaultValue": "AS_Domain_Watchlist",
+            "defaultValue": "AS-Domain-Watchlist",
             "type": "string"
         },
         "WatchlistDescription": {
